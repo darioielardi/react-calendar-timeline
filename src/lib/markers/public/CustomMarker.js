@@ -1,20 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { TimelineMarkersConsumer } from '../TimelineMarkersContext'
-import { TimelineMarkerType } from '../markerType'
+import PropTypes from 'prop-types';
+import React from 'react';
+import { TimelineMarkerType } from '../markerType';
+import { TimelineMarkersConsumer } from '../TimelineMarkersContext';
 
 class CustomMarker extends React.Component {
   static propTypes = {
     subscribeMarker: PropTypes.func.isRequired,
     updateMarker: PropTypes.func.isRequired,
     children: PropTypes.func,
-    date: PropTypes.number.isRequired
-  }
+    date: PropTypes.number.isRequired,
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.date !== this.props.date && this.getMarker) {
-      const marker = this.getMarker()
-      this.props.updateMarker({ ...marker, date: this.props.date })
+      const marker = this.getMarker();
+      this.props.updateMarker({ ...marker, date: this.props.date });
     }
   }
 
@@ -22,26 +22,26 @@ class CustomMarker extends React.Component {
     const { unsubscribe, getMarker } = this.props.subscribeMarker({
       type: TimelineMarkerType.Custom,
       renderer: this.props.children,
-      date: this.props.date
-    })
-    this.unsubscribe = unsubscribe
-    this.getMarker = getMarker
+      date: this.props.date,
+    });
+    this.unsubscribe = unsubscribe;
+    this.getMarker = getMarker;
   }
 
   componentWillUnmount() {
     if (this.unsubscribe != null) {
-      this.unsubscribe()
-      this.unsubscribe = null
+      this.unsubscribe();
+      this.unsubscribe = null;
     }
   }
 
   render() {
-    return null
+    return null;
   }
 }
 
 // TODO: turn into HOC?
-const CustomMarkerWrapper = props => {
+const CustomMarkerWrapper = (props) => {
   return (
     <TimelineMarkersConsumer>
       {({ subscribeMarker, updateMarker }) => (
@@ -52,9 +52,9 @@ const CustomMarkerWrapper = props => {
         />
       )}
     </TimelineMarkersConsumer>
-  )
-}
+  );
+};
 
-CustomMarkerWrapper.displayName = 'CustomMarkerWrapper'
+CustomMarkerWrapper.displayName = 'CustomMarkerWrapper';
 
-export default CustomMarkerWrapper
+export default CustomMarkerWrapper;

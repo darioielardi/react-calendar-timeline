@@ -13,8 +13,8 @@
 */
 
 // If we decide to pass in props to TimelineMarkers, then yes, this is necessary.
-const TimelineMarkers = props => {
-  return props.children || null
-}
+const TimelineMarkers = (props) => {
+  return props.children || null;
+};
 
-export default TimelineMarkers
+export default TimelineMarkers;

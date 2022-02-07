@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import moment from 'moment'
-
-import Timeline from 'react-calendar-timeline'
-import CustomInfoLabel from './CustomInfoLabel'
-
-import generateFakeData from '../generate-fake-data'
+import React, { Component } from 'react';
+import Timeline from 'react-calendar-timeline';
+import dayjs from '../dayjs';
+import generateFakeData from '../generate-fake-data';
+import CustomInfoLabel from './CustomInfoLabel';
 
 var keys = {
   groupIdKey: 'id',
@@ -16,21 +14,16 @@ var keys = {
   itemGroupKey: 'group',
   itemTimeStartKey: 'start',
   itemTimeEndKey: 'end',
-  groupLabelKey: 'title'
-}
+  groupLabelKey: 'title',
+};
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups, items } = generateFakeData(5, 20)
-    const defaultTimeStart = moment()
-      .startOf('day')
-      .toDate()
-    const defaultTimeEnd = moment()
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
+    const { groups, items } = generateFakeData(5, 20);
+    const defaultTimeStart = dayjs().startOf('day').toDate();
+    const defaultTimeEnd = dayjs().startOf('day').add(1, 'day').toDate();
 
     this.state = {
       groups,
@@ -40,61 +33,59 @@ export default class App extends Component {
       showInfoLabel: false,
       infoLabelTime: '',
       infoLabelGroupTitle: '',
-      infoLabelHeading: ''
-    }
+      infoLabelHeading: '',
+    };
   }
 
   handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    const { items, groups } = this.state
+    const { items, groups } = this.state;
 
-    const group = groups[newGroupOrder]
+    const group = groups[newGroupOrder];
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: dragTime,
-                end: dragTime + (item.end - item.start),
-                group: group.id
-              })
-            : item
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: dragTime,
+              end: dragTime + (item.end - item.start),
+              group: group.id,
+            })
+          : item
       ),
       showInfoLabel: false,
-      infoLabelTime: ''
-    })
-  }
+      infoLabelTime: '',
+    });
+  };
 
   handleItemResize = (itemId, time, edge) => {
-    const { items } = this.state
+    const { items } = this.state;
 
     this.setState({
-      items: items.map(
-        item =>
-          item.id === itemId
-            ? Object.assign({}, item, {
-                start: edge === 'left' ? time : item.start,
-                end: edge === 'left' ? item.end : time
-              })
-            : item
+      items: items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start: edge === 'left' ? time : item.start,
+              end: edge === 'left' ? item.end : time,
+            })
+          : item
       ),
       showInfoLabel: false,
-      infoLabelTime: ''
-    })
-  }
+      infoLabelTime: '',
+    });
+  };
 
-  handleItemDrag = ({ eventType, itemId, time, edge, newGroupOrder }) => {
-    const group = this.state.groups[newGroupOrder]
-    const infoLabelGroupTitle = group ? group.title : ''
-    const infoLabelTime = moment(time).format('dddd, MMMM Do YYYY')
-    let heading = ''
+  handleItemDrag = ({ eventType, time, newGroupOrder }) => {
+    const group = this.state.groups[newGroupOrder];
+    const infoLabelGroupTitle = group ? group.title : '';
+    const infoLabelTime = dayjs(time).format('dddd, MMMM Do YYYY');
+    let heading = '';
     switch (eventType) {
       case 'move':
-        heading = '🚚 Moving'
-        break
+        heading = '🚚 Moving';
+        break;
       case 'resize':
-        heading = '📅 Resizing'
-        break
+        heading = '📅 Resizing';
+        break;
     }
 
     if (
@@ -105,10 +96,10 @@ export default class App extends Component {
         showInfoLabel: true,
         infoLabelTime,
         infoLabelGroupTitle,
-        infoLabelHeading: heading
-      })
+        infoLabelHeading: heading,
+      });
     }
-  }
+  };
 
   render() {
     const {
@@ -119,8 +110,8 @@ export default class App extends Component {
       showInfoLabel,
       infoLabelTime,
       infoLabelGroupTitle,
-      infoLabelHeading
-    } = this.state
+      infoLabelHeading,
+    } = this.state;
 
     const customInfoLabelMarkup = showInfoLabel ? (
       <CustomInfoLabel
@@ -128,7 +119,7 @@ export default class App extends Component {
         groupTitle={infoLabelGroupTitle}
         heading={infoLabelHeading}
       />
-    ) : null
+    ) : null;
 
     return (
       <div>
@@ -150,6 +141,6 @@ export default class App extends Component {
           onItemDrag={this.handleItemDrag}
         />
       </div>
-    )
+    );
   }
 }

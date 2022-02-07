@@ -1,13 +1,10 @@
-import React, { Component } from 'react'
-import moment from 'moment'
-
-import Timeline from 'react-calendar-timeline'
-import containerResizeDetector from '../../../src/resize-detector/container'
-
+import React, { Component } from 'react';
+import Timeline from 'react-calendar-timeline';
+import containerResizeDetector from '../../../src/resize-detector/container';
+import dayjs from '../dayjs';
 // you would use this in real life:
 // import containerResizeDetector from 'react-calendar-timeline/lib/resize-detector/container'
-
-import generateFakeData from '../generate-fake-data'
+import generateFakeData from '../generate-fake-data';
 
 var keys = {
   groupIdKey: 'id',
@@ -18,40 +15,30 @@ var keys = {
   itemDivTitleKey: 'title',
   itemGroupKey: 'group',
   itemTimeStartKey: 'start',
-  itemTimeEndKey: 'end'
-}
+  itemTimeEndKey: 'end',
+};
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const { groups, items } = generateFakeData(10, 200)
-    const defaultTimeStart = moment()
-      .startOf('day')
-      .toDate()
-    const defaultTimeEnd = moment()
-      .startOf('day')
-      .add(1, 'day')
-      .toDate()
-    const width = 80
+    const { groups, items } = generateFakeData(10, 200);
+    const defaultTimeStart = dayjs().startOf('day').toDate();
+    const defaultTimeEnd = dayjs().startOf('day').add(1, 'day').toDate();
+    const width = 80;
 
     this.state = {
       groups,
       items,
       defaultTimeStart,
       defaultTimeEnd,
-      width
-    }
+      width,
+    };
   }
 
   render() {
-    const {
-      groups,
-      items,
-      defaultTimeStart,
-      defaultTimeEnd,
-      width
-    } = this.state
+    const { groups, items, defaultTimeStart, defaultTimeEnd, width } =
+      this.state;
 
     return (
       <div>
@@ -83,14 +70,14 @@ export default class App extends Component {
             <br />
             Set containers width:
             <br />
-            {[20, 40, 60, 80].map(p => (
+            {[20, 40, 60, 80].map((p) => (
               <span
                 key={p}
                 onClick={() => this.setState({ width: p })}
                 style={{
                   cursor: 'pointer',
                   marginLeft: 10,
-                  textDecoration: p === width ? 'underline' : 'none'
+                  textDecoration: p === width ? 'underline' : 'none',
                 }}
               >
                 {p}%
@@ -99,6 +86,6 @@ export default class App extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }

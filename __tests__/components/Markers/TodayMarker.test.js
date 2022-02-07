@@ -1,14 +1,14 @@
-import React from 'react'
-import { render, fireEvent, cleanup } from 'react-testing-library'
-import 'jest-dom/extend-expect'
-import { RenderWrapper } from 'test-utility/marker-renderer'
-import TimelineMarkers from 'lib/markers/public/TimelineMarkers'
-import TodayMarker from 'lib/markers/public/TodayMarker'
+import 'jest-dom/extend-expect';
+import TimelineMarkers from 'lib/markers/public/TimelineMarkers';
+import TodayMarker from 'lib/markers/public/TodayMarker';
+import React from 'react';
+import { cleanup, fireEvent, render } from 'react-testing-library';
+import { RenderWrapper } from 'test-utility/marker-renderer';
 
-const defaultTestId = 'default-today-line'
+const defaultTestId = 'default-today-line';
 
 describe('TodayMarker', () => {
-  afterEach(cleanup)
+  afterEach(cleanup);
   it('is present', () => {
     const { getByTestId } = render(
       <RenderWrapper>
@@ -16,21 +16,21 @@ describe('TodayMarker', () => {
           <TodayMarker />
         </TimelineMarkers>
       </RenderWrapper>
-    )
+    );
 
-    expect(getByTestId(defaultTestId)).toBeInTheDocument()
-  })
+    expect(getByTestId(defaultTestId)).toBeInTheDocument();
+  });
 
   it('is removed after initial render', () => {
     class RemoveTodayMarker extends React.Component {
       state = {
-        isShowing: true
-      }
+        isShowing: true,
+      };
       handleToggleTodayMarker = () => {
         this.setState({
-          isShowing: false
-        })
-      }
+          isShowing: false,
+        });
+      };
       render() {
         return (
           <RenderWrapper>
@@ -39,21 +39,21 @@ describe('TodayMarker', () => {
               {this.state.isShowing && <TodayMarker />}
             </TimelineMarkers>
           </RenderWrapper>
-        )
+        );
       }
     }
 
-    const { queryByTestId, getByText } = render(<RemoveTodayMarker />)
+    const { queryByTestId, getByText } = render(<RemoveTodayMarker />);
 
-    expect(queryByTestId(defaultTestId)).toBeInTheDocument()
+    expect(queryByTestId(defaultTestId)).toBeInTheDocument();
 
-    fireEvent.click(getByText('Hide Today'))
+    fireEvent.click(getByText('Hide Today'));
 
-    expect(queryByTestId(defaultTestId)).not.toBeInTheDocument()
-  })
+    expect(queryByTestId(defaultTestId)).not.toBeInTheDocument();
+  });
 
   it('allows for custom renderer', () => {
-    const dataTestId = 'custom-today-renderer'
+    const dataTestId = 'custom-today-renderer';
 
     const { getByTestId } = render(
       <RenderWrapper>
@@ -61,13 +61,13 @@ describe('TodayMarker', () => {
           <TodayMarker>{() => <div data-testid={dataTestId} />}</TodayMarker>
         </TimelineMarkers>
       </RenderWrapper>
-    )
+    );
 
-    expect(getByTestId(dataTestId)).toBeInTheDocument()
-  })
+    expect(getByTestId(dataTestId)).toBeInTheDocument();
+  });
 
   it('custom renderer is passed styles and date', () => {
-    const renderMock = jest.fn(() => null)
+    const renderMock = jest.fn(() => null);
 
     render(
       <RenderWrapper>
@@ -75,16 +75,16 @@ describe('TodayMarker', () => {
           <TodayMarker>{renderMock}</TodayMarker>
         </TimelineMarkers>
       </RenderWrapper>
-    )
+    );
 
     // FIXME: test for date and styles as actual values
     expect(renderMock).toHaveBeenCalledWith({
       date: expect.any(Number),
-      styles: expect.any(Object)
-    })
-  })
+      styles: expect.any(Object),
+    });
+  });
 
   // TODO: find good way to test these interval based functionality
   // xit('sets setInterval timeout based on passed in prop')
   // xit('sets setInterval timeout to 10 seconds if no interval prop passed in')
-})
+});
